@@ -1,0 +1,6 @@
+# Specific YouTube API secrets and environment
+/config/client_secret.json
+/config/token.json
+/youtube_env/
+*.pyc
+__pycache__/
