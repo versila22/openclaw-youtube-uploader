@@ -11,6 +11,9 @@ SCRIPT_UPLOAD = "upload_youtube.py"
 # Chemin vers l'exécutable Python de l'environnement virtuel (CRITIQUE pour l'industrialisation)
 PYTHON_EXECUTABLE = sys.executable
 
+# --- Le Module Analytics (Niveau 9) ---
+SCRIPT_ANALYTICS = "fetch_analytics.py"
+
 def run_step(step_name, script_file, args=None):
     """
     Exécute un script Python du pipeline et gère les erreurs.
@@ -50,6 +53,15 @@ def main():
         
     sujet = sys.argv[1]
     print(f"🎯 Lancement de l'Usine Logicielle sur le sujet : '{sujet}'")
+    
+    # Étape 0 : L'Analyse Data-Driven (Récupération des métriques YouTube)
+    # L'usine vérifie d'abord si elle peut apprendre de ses erreurs passées
+    if os.path.exists(TOKEN_FILE):
+        print("\n" + "="*50)
+        print("📊 NIVEAU 9 : Collecte des Analytics de la chaîne YouTube...")
+        print("="*50)
+        # On ne met pas de "check=True" ici. Si l'API plante, on veut quand même générer la vidéo.
+        subprocess.run([PYTHON_EXECUTABLE, SCRIPT_ANALYTICS], text=True)
     
     # Étape 1 : Le Cerveau (Génération du script par Gemini)
     run_step("Génération du Script et des Métadonnées", SCRIPT_BRAIN, args=[sujet])

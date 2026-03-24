@@ -5,6 +5,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+from google.auth.transport.requests import Request # NOUVEAU : Import obligatoire
 from googleapiclient.http import MediaFileUpload
 
 # -- Configuration des chemins --
@@ -15,8 +16,11 @@ TOKEN_FILE = "/data/.openclaw/workspace/openclaw-youtube-uploader/config/token.j
 
 VIDEO_FILE = "output_video.mp4"
 
-# Ce scope autorise l'upload de vidéos
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+# Ce scope autorise l'upload de vidéos ET la lecture de la chaîne (pour les analytics de base)
+SCOPES = [
+    "https://www.googleapis.com/auth/youtube.upload",
+    "https://www.googleapis.com/auth/youtube.readonly"
+]
 
 def get_authenticated_service():
     print("🔐 Initialisation de l'authentification YouTube...")
@@ -40,7 +44,7 @@ def get_authenticated_service():
     if not credentials or not credentials.valid:
         if credentials and credentials.expired and credentials.refresh_token:
             print("🔄 Rafraîchissement du token expiré...")
-            credentials.refresh(google.auth.Request())
+            credentials.refresh(Request()) # Modification de l'appel
         else:
             print("🌐 Démarrage du flux d'autorisation initial OAuth2 (Une action manuelle sera requise)...")
             
@@ -156,5 +160,5 @@ if __name__ == "__main__":
         file_path=VIDEO_FILE,
         title=video_title,
         description=video_desc,
-        privacy_status="private" # Toujours tester en privé
+        privacy_status="public" # DEPLOIEMENT EN PRODUCTION (Vidéo publique)
     )

@@ -4,3 +4,14 @@
 /youtube_env/
 *.pyc
 __pycache__/
+
+# Fichiers Temporaires du Pipeline (A ignorer absolument pour Git)
+/assets/
+*.jpg
+*.mp4
+*.mp3
+*.txt
+*.json
+!metadata.json
+!analytics.json
+
